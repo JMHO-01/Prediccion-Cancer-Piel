@@ -1,0 +1,12 @@
+API:
+pip install google-generativeai
+pip install pandas
+pip install joblib
+pip install scikit-image
+pip install google-generativeai fastapi uvicorn
+pip install openpyxl
+pip install scikit-learn
+
+IONIC:
+
+npm install @ionic/storage-angular
