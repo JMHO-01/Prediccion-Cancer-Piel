@@ -1,0 +1,35 @@
+<!-- src/app/home/home.page.html -->
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Inicio</ion-title>
+    <!-- Botón de Cerrar Sesión movido al final de la toolbar para consistencia -->
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div id="container" class="ion-text-center"> <!-- Añadido ion-text-center para centrar el contenido -->
+    <img src="assets/icon/logo.png" alt="Logo de la Aplicación" class="app-logo">
+    <h1>Bienvenido a Scan Doctor</h1>
+    <!-- Puedes añadir un mensaje opcional si el usuario está logeado -->
+    <p *ngIf="currentUser" class="ion-margin-top">Sr(a): <strong>{{ currentUser.email }}</strong></p>
+    <p>Tu asistente para la detección temprana de anomalías en la piel.</p>
+    <p>¡Con la ayuda de la inteligencia artificial!</p>
+
+    <ion-button expand="block" routerLink="/skin-prediction" class="ion-margin-top home-button">
+      <ion-icon name="scan-circle-outline" slot="start"></ion-icon>
+      Iniciar Análisis de Piel
+    </ion-button>
+
+    <ion-button expand="block" fill="outline" routerLink="/about" class="ion-margin-top home-button">
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      Acerca de la Aplicación
+    </ion-button>
+
+  </div>
+</ion-content>

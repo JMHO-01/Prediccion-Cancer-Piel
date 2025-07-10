@@ -1,0 +1,101 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrar Paciente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Nuevo Paciente</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
+        <ion-list>
+          <ion-item>
+            <ion-input label="Nombre" labelPlacement="floating" formControlName="nombre" placeholder="Ingresa nombre"></ion-input>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)">
+            <ng-container *ngIf="nameControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="nameControl?.errors?.['minlength']">Mínimo 2 caracteres.</ng-container>
+            <ng-container *ngIf="nameControl?.errors?.['pattern']">Solo letras y espacios.</ng-container>
+          </ion-note>
+
+          <ion-item>
+            <ion-input label="Apellidos" labelPlacement="floating" formControlName="apellidos" placeholder="Ingresa apellidos"></ion-input>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="lastNameControl?.invalid && (lastNameControl?.dirty || lastNameControl?.touched)">
+            <ng-container *ngIf="lastNameControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="lastNameControl?.errors?.['minlength']">Mínimo 2 caracteres.</ng-container>
+            <ng-container *ngIf="lastNameControl?.errors?.['pattern']">Solo letras y espacios.</ng-container>
+          </ion-note>
+
+          <ion-item>
+            <ion-input label="Fecha de Nacimiento" labelPlacement="floating" type="date"
+                       formControlName="fechaNacimiento" [max]="today"></ion-input>
+            <ion-label slot="end" *ngIf="dobControl?.valid && dobControl?.value && calculateAge(dobControl?.value) !== null" color="medium">
+              Edad: {{ calculateAge(dobControl?.value) }}
+            </ion-label>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="dobControl?.invalid && (dobControl?.dirty || dobControl?.touched)">
+            <ng-container *ngIf="dobControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="dobControl?.errors?.['invalidDate']">Fecha inválida.</ng-container>
+            <ng-container *ngIf="dobControl?.errors?.['futureDate']">Fecha no puede ser futura.</ng-container>
+            <ng-container *ngIf="dobControl?.errors?.['ageExceedsLimit']">El paciente no puede tener más de 80 años.</ng-container>
+          </ion-note>
+          <ion-item>
+            <ion-select label="Sexo" labelPlacement="floating" formControlName="sexo" placeholder="Selecciona">
+              <ion-select-option value="Masculino">Masculino</ion-select-option>
+              <ion-select-option value="Femenino">Femenino</ion-select-option>
+              <ion-select-option value="Otro">Otro</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="genderControl?.invalid && (genderControl?.dirty || genderControl?.touched)">
+            <ng-container *ngIf="genderControl?.errors?.['required']">Obligatorio.</ng-container>
+          </ion-note>
+
+          <ion-item>
+            <ion-input label="Número Telefónico" labelPlacement="floating" type="tel"
+              formControlName="numeroTelefonico" placeholder="Ej: 987654321"></ion-input>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="phoneControl?.invalid && (phoneControl?.dirty || phoneControl?.touched)">
+            <ng-container *ngIf="phoneControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="phoneControl?.errors?.['pattern']">Número de 9 dígitos (solo números).</ng-container>
+          </ion-note>
+
+          <ion-item>
+            <ion-input label="Ocupación" labelPlacement="floating" formControlName="ocupacion" placeholder="Ej: Ingeniero"></ion-input>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="occupationControl?.invalid && (occupationControl?.dirty || occupationControl?.touched)">
+            <ng-container *ngIf="occupationControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="occupationControl?.errors?.['minlength']">Mínimo 3 caracteres.</ng-container>
+          </ion-note>
+
+          <ion-item>
+            <ion-textarea label="Dirección" labelPlacement="floating" formControlName="direccion" placeholder="Ej: Av. Las Américas 123"></ion-textarea>
+          </ion-item>
+          <ion-note slot="end" color="danger"
+            *ngIf="addressControl?.invalid && (addressControl?.dirty || addressControl?.touched)">
+            <ng-container *ngIf="addressControl?.errors?.['required']">Obligatorio.</ng-container>
+            <ng-container *ngIf="addressControl?.errors?.['minlength']">Mínimo 5 caracteres.</ng-container>
+          </ion-note>
+
+        </ion-list>
+
+        <ion-button expand="block" type="submit" [disabled]="patientForm.invalid" class="ion-margin-top">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Guardar Paciente
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

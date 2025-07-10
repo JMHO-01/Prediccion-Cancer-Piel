@@ -1,0 +1,92 @@
+<!-- src/app/perfil/perfil.page.html -->
+<ion-header class="ion-no-border elegant-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="header-title">Mi Perfil</ion-title>
+    <!-- Botón de Cerrar Sesión añadido -->
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding profile-content">
+  <div class="profile-container">
+
+    <div class="profile-image-wrapper" (click)="selectProfileImage()">
+      <div class="profile-image" [class.has-no-image]="!profileImageUrl">
+        <ion-img *ngIf="profileImageUrl" [src]="profileImageUrl" alt="Foto de Perfil"></ion-img>
+        <ng-container *ngIf="!profileImageUrl">
+          <ion-icon name="camera-outline"></ion-icon>
+          <span>Añadir</span>
+        </ng-container>
+      </div>
+      <!-- El botón de cámara flotante se mantiene -->
+      <ion-button fill="clear" class="change-photo-button">
+        <ion-icon name="add-circle-outline"></ion-icon> <!-- Icono de "+" -->
+      </ion-button>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+
+      <ion-item class="elegant-item" [class.ion-invalid]="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input formControlName="nombre" type="text"></ion-input> <!-- Corregido: Es un componente Ionic, no un input HTML. Se cierra normalmente o con /> si no tiene contenido interno. -->
+      </ion-item>
+      <ion-text color="danger" class="error-message">
+        <p *ngIf="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+          {{ getErrorMessage('nombre') }}
+        </p>
+      </ion-text>
+
+      <ion-item class="elegant-item" [class.ion-invalid]="profileForm.get('apellidos')?.invalid && profileForm.get('apellidos')?.touched">
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input formControlName="apellidos" type="text"></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message">
+        <p *ngIf="profileForm.get('apellidos')?.invalid && profileForm.get('apellidos')?.touched">
+          {{ getErrorMessage('apellidos') }}
+        </p>
+      </ion-text>
+
+      <ion-item class="elegant-item" [class.ion-invalid]="profileForm.get('edad')?.invalid && profileForm.get('edad')?.touched">
+        <ion-label position="floating">Edad</ion-label>
+        <ion-input formControlName="edad" type="number" inputmode="numeric"></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message">
+        <p *ngIf="profileForm.get('edad')?.invalid && profileForm.get('edad')?.touched">
+          {{ getErrorMessage('edad') }}
+        </p>
+      </ion-text>
+
+      <ion-item class="elegant-item" [class.ion-invalid]="profileForm.get('correo')?.invalid && profileForm.get('correo')?.touched">
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input formControlName="correo" type="email"></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message">
+        <p *ngIf="profileForm.get('correo')?.invalid && profileForm.get('correo')?.touched">
+          {{ getErrorMessage('correo') }}
+        </p>
+      </ion-text>
+
+      <ion-item class="elegant-item" [class.ion-invalid]="profileForm.get('especialidad')?.invalid && profileForm.get('especialidad')?.touched">
+        <ion-label position="floating">Especialidad</ion-label>
+        <ion-input formControlName="especialidad" type="text"></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message">
+        <p *ngIf="profileForm.get('especialidad')?.invalid && profileForm.get('especialidad')?.touched">
+          {{ getErrorMessage('especialidad') }}
+        </p>
+      </ion-text>
+
+      <ion-button expand="block" type="submit" [disabled]="profileForm.invalid" class="save-button">
+        <!-- ion-spinner se añade aquí para resolver la advertencia y mejorar UX -->
+        <ion-spinner *ngIf="false" name="crescent"></ion-spinner> <!-- Se mantiene en 'false' si no tienes 'isLoading' en el TS -->
+        <span *ngIf="true">Guardar Perfil</span> <!-- Se mantiene en 'true' si no tienes 'isLoading' en el TS -->
+      </ion-button>
+
+    </form>
+  </div>
+</ion-content>

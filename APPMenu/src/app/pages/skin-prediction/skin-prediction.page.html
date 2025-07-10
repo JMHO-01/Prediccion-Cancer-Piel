@@ -1,0 +1,181 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Análisis de Piel</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="prediction-container ion-padding">
+    <ion-card class="patient-card ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Seleccionar Paciente</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Botón para abrir el modal de selección de paciente -->
+        <ion-button expand="block" fill="solid" (click)="openPatientSelectionModal()"
+          class="ion-margin-bottom" [disabled]="patients.length === 0">
+          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+          <!-- Muestra el nombre del paciente seleccionado o un texto predeterminado -->
+          {{ selectedPatient ? (selectedPatient.nombre + ' ' + selectedPatient.apellidos + ' (' + selectedPatient.edad + ' años)') : 'Seleccionar Paciente' }}
+        </ion-button>
+
+        <ion-text color="medium" *ngIf="patients.length === 0" class="ion-text-center">
+          <p>No hay pacientes registrados. Por favor, registra uno para continuar.</p>
+        </ion-text>
+
+        <ion-button expand="block" fill="outline" routerLink="/patients-register" class="ion-margin-top">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          {{ patients.length > 0 ? 'Registrar Otro Paciente' : 'Registrar Nuevo Paciente' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="image-container" (click)="selectImage()">
+      <div *ngIf="!selectedImageUrl" class="image-placeholder">
+        <ion-icon name="image-outline" size="large"></ion-icon>
+        <p>Insertar Imagen</p>
+        <p class="subtitle">Toca para agregar una imagen</p>
+      </div>
+
+      <img *ngIf="selectedImageUrl" [src]="selectedImageUrl" alt="Imagen seleccionada" class="selected-image">
+
+      <div class="validation-overlay" *ngIf="isValidating">
+        <ion-spinner name="dots" color="primary"></ion-spinner>
+        <p>Validando imagen...</p>
+      </div>
+
+      <input type="file"
+             #fileInput
+             accept="image/jpeg, image/png, image/webp"
+             (change)="onImageSelected($event)"
+             style="display: none;">
+    </div>
+
+    <ion-button
+      expand="block"
+      color="primary"
+      [disabled]="!selectedImageUrl || !selectedPatient || isLoading || isValidating"
+      (click)="predictImage()"
+      class="predict-button">
+      <ion-icon name="analytics-outline" slot="start"></ion-icon>
+      <span *ngIf="!isLoading && !isValidating">Predecir</span>
+      <span *ngIf="isValidating">Validando...</span>
+      <span *ngIf="isLoading && !isValidating">Analizando...</span>
+    </ion-button>
+
+  </div>
+
+  <!-- Modal para la Selección de Pacientes -->
+  <ion-modal [isOpen]="showPatientSelectionModal" (didDismiss)="closePatientSelectionModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Seleccionar Paciente</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closePatientSelectionModal()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <!-- Barra de búsqueda para filtrar pacientes -->
+          <ion-searchbar placeholder="Buscar paciente por nombre o apellido..." [(ngModel)]="patientSearchTerm" animated></ion-searchbar>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <!-- Itera sobre la lista de pacientes filtrados -->
+          <ion-item *ngFor="let patient of filteredPatients" (click)="selectPatientFromModal(patient)">
+            <ion-label>
+              <h2>{{ patient.nombre }} {{ patient.apellidos }}</h2>
+              <p>{{ patient.edad }} años</p>
+            </ion-label>
+            <!-- Muestra un ícono si este paciente está actualmente seleccionado -->
+            <ion-icon name="checkmark-circle" slot="end" color="primary" *ngIf="selectedPatient?.id === patient.id"></ion-icon>
+          </ion-item>
+          <!-- Mensaje si no se encuentran pacientes después de filtrar -->
+          <ion-item *ngIf="filteredPatients.length === 0">
+              <ion-label class="ion-text-center">No se encontraron pacientes.</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Modal para el Resultado de Predicción -->
+  <ion-modal [isOpen]="showModal" (didDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Resultado de Predicción</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <div class="modal-content" *ngIf="predictionResult">
+
+          <div class="analyzed-image">
+            <img [src]="selectedImageUrl" alt="Imagen analizada">
+          </div>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Análisis Completado</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="result-details">
+                <div class="prediction-label">
+                  <h2 [ngClass]="getResultClass()">{{ predictionResult.prediction }}</h2>
+                </div>
+
+                <div class="confidence-info" *ngIf="predictionResult?.confidence !== undefined">
+                  <p><strong>Nivel de Confianza:</strong></p>
+                  <ion-progress-bar
+                    [value]="predictionResult.confidence"
+                    [color]="getProgressColor()">
+                  </ion-progress-bar>
+                  <p class="confidence-percentage">{{ (predictionResult.confidence! * 100).toFixed(2) }}%</p>
+                </div>
+
+                <ion-item *ngIf="predictionResult.recommendation">
+                  <ion-icon name="medical-outline" slot="start"></ion-icon>
+                  <ion-label class="ion-text-wrap">
+                    <h3>Recomendación</h3>
+                    <p>{{ predictionResult.recommendation }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-note color="warning">
+                  <div class="disclaimer">
+                    <ion-icon name="warning-outline"></ion-icon>
+                    <p><strong>Importante:</strong> Este resultado es solo una predicción automatizada y no reemplaza la consulta con un dermatólogo profesional. Siempre consulte a un médico para un diagnóstico definitivo.</p>
+                  </div>
+                </ion-note>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <div class="action-buttons">
+            <ion-button expand="block" fill="outline" (click)="analyzeAnother()">
+              <ion-icon name="image-outline" slot="start"></ion-icon> Analizar Otra Imagen
+            </ion-button>
+
+            <ion-button expand="block" color="primary" (click)="closeModal()">
+              <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+              Entendido
+            </ion-button>
+          </div>
+
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

@@ -1,0 +1,254 @@
+/* src/app/perfil/perfil.page.scss */
+
+// Variables para colores y sombras para un estilo consistente y elegante
+:root {
+  --primary-color: #6c63ff; // Un violeta/azul suave
+  --secondary-color: #f0f2f5; // Fondo muy claro para el contenido
+  --text-color: #333333;
+  --placeholder-color: #888888;
+  --border-color: #e0e0e0; // Borde más claro para los inputs
+  --bg-color-light: #ffffff; // Fondo blanco para tarjetas y campos
+  --shadow-color-subtle: rgba(0, 0, 0, 0.05); // Sombra muy ligera
+  --shadow-color-medium: rgba(0, 0, 0, 0.1); // Sombra más visible
+  --border-radius-lg: 20px; // Más redondeado para un look moderno
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+
+  /* Agregamos una variable para el color primario en RGB para usarlo en rgba() */
+  --primary-color-rgb: 108, 99, 255;
+}
+
+// Estilos de la cabecera (header)
+.elegant-header {
+  --background: var(--bg-color-light);
+  border-bottom: 1px solid var(--border-color); // Borde sutil para separar del contenido
+  .header-title {
+    color: var(--text-color);
+    font-size: 1.6rem; // Un poco más grande
+    font-weight: 700;
+    text-align: center;
+    padding-top: 10px; // Espacio superior en el título
+    padding-bottom: 10px; // Espacio inferior
+  }
+}
+
+// Contenedor principal para centrar el contenido
+.profile-content {
+  --background: var(--secondary-color); // Fondo muy claro para el contenido
+  display: flex;
+  justify-content: center; // Centra horizontalmente
+  align-items: flex-start; // Alinea arriba (o 'center' si quieres centrar también verticalmente)
+  padding: 30px 15px; // Padding general para la página
+  overflow-y: auto; // Asegura scroll si el contenido es largo
+
+  .profile-container {
+    background: var(--bg-color-light);
+    border-radius: var(--border-radius-lg); // Esquinas más redondeadas
+    box-shadow: 0 10px 30px var(--shadow-color-subtle); // Sombra más suave y moderna
+    padding: 30px 25px;
+    max-width: 450px; // Ancho máximo del formulario
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Centra los elementos hijos (imagen, formulario)
+    margin-bottom: 30px; // Espacio en la parte inferior si hay contenido más abajo
+    box-sizing: border-box; // Asegura que padding no aumente el tamaño total
+  }
+}
+
+/* --- Sección de la Foto/Icono de Perfil - MODIFICADA --- */
+.profile-image-wrapper {
+  position: relative;
+  width: 150px; /* Tamaño del contenedor del icono/imagen */
+  height: 150px;
+  margin-bottom: 40px; /* Más espacio entre la imagen y los campos */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Indica que es clickeable */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transiciones suaves */
+  border-radius: 50%; /* Hacemos el wrapper también circular */
+  overflow: hidden; /* Asegura que cualquier cosa fuera del círculo se recorte */
+
+  &:active {
+    transform: scale(0.98); /* Efecto visual al presionar */
+    box-shadow: 0 4px 15px var(--shadow-color-medium);
+  }
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* ¡Ahora es un círculo perfecto! */
+  overflow: hidden;
+  background: var(--secondary-color); /* Fondo para el icono si no hay imagen */
+  display: flex;
+  flex-direction: column; /* Para alinear el icono y el texto "Añadir" */
+  justify-content: center;
+  align-items: center;
+  border: 4px solid var(--primary-color); /* Borde claro y visible */
+  box-shadow: 0 5px 25px rgba(var(--primary-color-rgb), 0.4);
+  position: relative;
+  z-index: 1;
+
+  ion-icon {
+    font-size: 80px; /* Tamaño más grande para el icono */
+    color: var(--primary-color);
+    margin-bottom: 5px; /* Espacio entre el icono y el texto */
+  }
+
+  /* Nuevo estilo para el texto "Añadir" */
+  &.has-no-image {
+    color: var(--placeholder-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  ion-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.change-photo-button {
+  position: absolute;
+  bottom: 0px; /* Ajusta la posición del botón de cámara */
+  right: 0px;
+  --background: var(--primary-color);
+  --background-hover: darken(var(--primary-color), 10%);
+  --color: white;
+  --border-radius: 50%;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  box-shadow: 0 3px 10px var(--shadow-color-medium); /* Sombra para el botón flotante */
+  z-index: 2; /* Asegura que esté por encima del cuadro de imagen */
+  ion-icon {
+    font-size: 1.3rem;
+  }
+}
+
+
+/* --- Formulario de Campos de Perfil --- */
+.profile-form {
+  width: 100%;
+  max-width: 380px; // Ancho máximo para los campos dentro del formulario para una mejor estética
+  margin-top: 15px;
+}
+
+.elegant-item {
+  --background: var(--bg-color-light);
+  --border-radius: var(--border-radius-md);
+  margin-bottom: 0px; 
+  box-shadow: 0 2px 8px var(--shadow-color-subtle); // Sombra sutil para cada input
+  border: 1px solid var(--border-color); // Borde suave
+  transition: all 0.2s ease-in-out; // Transiciones para efectos hover/focus
+
+  &:hover {
+    box-shadow: 0 4px 12px var(--shadow-color-subtle); // Sombra un poco más visible al pasar el ratón
+  }
+
+  &.ion-focused {
+    --highlight-color-focused: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2), 0 2px 8px var(--shadow-color-medium); // Anillo de enfoque con sombra
+  }
+
+  ion-label {
+    color: var(--placeholder-color);
+    font-size: 0.95rem;
+    padding-left: 5px; // Pequeño ajuste para la etiqueta flotante
+  }
+
+  ion-input {
+    --color: var(--text-color);
+    --placeholder-color: var(--placeholder-color);
+    font-size: 1rem;
+    --padding-start: 15px; // Más padding para un look más espacioso
+    --padding-end: 15px;
+    --padding-top: 14px; // Ajuste para altura
+    --padding-bottom: 14px;
+  }
+}
+
+.error-message {
+  margin-top: 1px; /* Un pequeño margen superior para separación mínima */
+  margin-bottom: 10px; /* Controla el espacio entre el mensaje de error y el siguiente input */
+  font-size: 0.8rem;
+  color: var(--ion-color-danger);
+  width: 100%;
+  text-align: left;
+  padding-left: 20px; // Alinea con el padding de ion-item
+}
+
+/* --- Botón Guardar --- */
+.save-button {
+  --background: var(--primary-color);
+  --background-activated: darken(var(--primary-color), 10%);
+  --background-focused: var(--primary-color);
+  --color: rgb(0, 0, 0);
+  --border-radius: var(--border-radius-md);
+  height: 55px; // Un poco más alto
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-top: 40px; // ¡Más espacio debajo del último campo!
+  width: 100%;
+  box-shadow: 0 8px 25px var(--shadow-color-medium); // Sombra más profunda
+  transition: all 0.3s ease;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-3px); // Pequeño efecto de elevación
+    box-shadow: 0 12px 30px var(--shadow-color-medium);
+  }
+
+  &[disabled] {
+    opacity: 0.5; // Menos opaco cuando está deshabilitado
+    cursor: not-allowed;
+    box-shadow: none; // Sin sombra cuando deshabilitado
+  }
+}
+
+// Adaptaciones para pantallas pequeñas
+@media (max-width: 500px) {
+  .profile-container {
+    padding: 25px 15px;
+    margin-top: 20px;
+  }
+  .profile-image-wrapper {
+    width: 120px; /* Ajustamos para pantallas pequeñas */
+    height: 120px;
+    margin-bottom: 30px;
+  }
+  .profile-image ion-icon {
+    font-size: 70px; /* Ajustamos el tamaño del icono */
+  }
+  .profile-image.has-no-image {
+    font-size: 1rem;
+  }
+  .change-photo-button {
+    bottom: -5px;
+    right: -5px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  }
+  .profile-form {
+    max-width: 100%;
+  }
+  .elegant-item {
+    margin-bottom: 0px; /* También a 0 en móvil */
+  }
+  .error-message {
+    margin-top: 2px; /* Pequeño margen superior en móvil */
+    margin-bottom: 15px; /* Espacio entre error y siguiente input en móvil */
+  }
+  .save-button {
+    height: 50px;
+    font-size: 1.05rem;
+    margin-top: 30px;
+  }
+}

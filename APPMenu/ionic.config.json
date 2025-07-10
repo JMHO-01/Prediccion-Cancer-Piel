@@ -1,0 +1,7 @@
+{
+  "name": "APPMenu",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

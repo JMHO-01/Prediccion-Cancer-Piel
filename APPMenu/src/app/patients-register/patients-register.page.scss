@@ -1,0 +1,60 @@
+.patient-register-page {
+  display: flex;
+  justify-content: center; // Centrar horizontalmente
+  align-items: flex-start; // Alinear al inicio verticalmente
+  padding: 20px;
+  background-color: #f0f2f5; // Un fondo suave
+
+  .form-container {
+    max-width: 500px; // Limitar el ancho del formulario
+    width: 100%;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); // Sombra más pronunciada
+    margin-top: 20px; // Un poco de margen superior
+  }
+
+  ion-list {
+    background: transparent; // Para que la lista no tenga fondo propio
+    padding: 0;
+  }
+
+  .form-item {
+    margin-bottom: 15px; // Espacio entre cada campo
+    border-radius: 8px;
+    overflow: hidden; // Asegura que los bordes redondeados se vean bien
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); // Sombra sutil para cada item
+    border: 1px solid var(--ion-color-light); // Borde ligero
+
+    &.ion-invalid.ion-touched {
+      border-color: var(--ion-color-danger); // Borde rojo si es inválido y tocado
+      box-shadow: 0 0 8px rgba(var(--ion-color-danger-rgb), 0.3);
+    }
+
+    ion-input, ion-textarea, ion-select {
+      --padding-start: 10px;
+      --padding-end: 10px;
+      --padding-top: 8px;
+      --padding-bottom: 8px;
+      font-size: 1rem; // Ajusta el tamaño de la fuente
+    }
+
+    ion-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ion-color-primary); // Color para las etiquetas
+    }
+
+    ion-note {
+      font-size: 0.8rem;
+    }
+  }
+
+  .save-button {
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Sombra para el botón
+    --border-radius: 8px;
+    font-weight: bold;
+    height: 48px;
+  }
+}

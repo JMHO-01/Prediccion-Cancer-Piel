@@ -1,0 +1,241 @@
+/* rf_extract.page.scss */
+
+.prediction-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; // Ocupa toda la altura del ion-content
+  padding: 20px;
+  text-align: center;
+}
+
+.image-container {
+  width: 100%;
+  max-width: 300px; /* Ancho máximo para la caja de imagen */
+  height: 300px; /* Altura fija para la caja de imagen */
+  border: 2px dashed var(--ion-color-medium);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Asegura que la imagen no se desborde */
+  cursor: pointer;
+  background-color: var(--ion-color-light);
+  transition: all 0.3s ease-in-out;
+  position: relative; /* Necesario para la imagen de fondo y el overlay */
+  margin-bottom: 20px;
+
+  &:hover {
+    border-color: var(--ion-color-primary);
+    background-color: var(--ion-color-light-shade);
+  }
+
+  .image-placeholder {
+    color: var(--ion-color-medium);
+
+    ion-icon {
+      font-size: 80px; // Tamaño del ícono
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: var(--ion-color-dark);
+    }
+    .subtitle {
+      font-size: 0.9em;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .selected-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+    display: block; /* Elimina espacio extra debajo de la imagen */
+  }
+
+  .validation-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--ion-color-light-rgb), 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /* Asegura que esté por encima de la imagen */
+    ion-spinner {
+      margin-bottom: 10px;
+    }
+  }
+
+  // NUEVOS ESTILOS para el estado de validación
+  .image-validation-status {
+    position: absolute;
+    bottom: 0; /* Posicionar en la parte inferior del contenedor */
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrar el contenido horizontalmente */
+    background: rgba(var(--ion-color-light-rgb), 0.9);
+    padding: 8px 10px; /* Más padding para que el mensaje no esté tan pegado */
+    border-radius: 0 0 10px 10px; /* Bordes redondeados solo abajo */
+    z-index: 11; /* Por encima de la imagen y el placeholder */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Sombra sutil arriba */
+    
+    ion-icon {
+      font-size: 1.5em; /* Icono un poco más grande */
+      margin-right: 8px;
+    }
+    ion-text p {
+      font-size: 0.9em; /* Texto un poco más grande */
+      margin: 0;
+      white-space: normal; /* Permitir que el texto se ajuste si es largo */
+      text-align: center;
+    }
+  }
+}
+
+
+.predict-button {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.result-container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px; // Limita el ancho del resultado si no está en modal
+}
+
+.result-content {
+  padding: 10px;
+  h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  ion-note {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.9em;
+  }
+  // Clases para resultados
+  .result-benigno {
+    color: var(--ion-color-success);
+  }
+  .result-maligno {
+    color: var(--ion-color-danger);
+  }
+}
+
+/* Estilos para el modal */
+ion-modal {
+  --width: 90%;
+  --max-width: 500px;
+  --height: 90%;
+  --border-radius: 10px;
+  --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.modal-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+
+  .analyzed-image {
+    width: 100%;
+    max-width: 250px; // Tamaño de la imagen dentro del modal
+    height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--ion-color-light);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  ion-card {
+    width: 100%;
+    margin: 0; // Quita el margen por defecto de la tarjeta en el modal
+    padding: 0;
+  }
+
+  .result-details {
+    padding: 10px;
+
+    .prediction-label {
+      h2 {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+    }
+
+    .confidence-info {
+      margin-bottom: 20px;
+      p {
+        font-size: 1.1em;
+        margin-bottom: 5px;
+      }
+      .confidence-percentage {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 5px;
+        color: var(--ion-color-dark);
+      }
+    }
+
+    .disclaimer {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: var(--ion-color-warning-tint);
+      color: var(--ion-color-warning-contrast);
+      font-size: 0.9em;
+
+      ion-icon {
+        font-size: 24px;
+        margin-right: 10px;
+        color: var(--ion-color-warning);
+      }
+      p {
+        margin: 0;
+        text-align: left;
+      }
+    }
+  }
+
+  .action-buttons {
+    width: 100%;
+    margin-top: 20px;
+    ion-button {
+      margin-bottom: 10px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

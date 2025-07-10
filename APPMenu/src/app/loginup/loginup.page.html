@@ -1,0 +1,131 @@
+<!-- src/app/loginup/loginup.page.html -->
+<ion-content [fullscreen]="true" class="bg-white" color="light">
+  <div class="flex flex-col items-center justify-center h-full w-full">
+    <div class="signup-container">
+      <div class="header-section">
+        <h1 class="app-title">Scan Doctor</h1>
+        <p class="app-subtitle">Regístrate</p>
+      </div>
+
+      <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSignup()">
+        <div class="input-group">
+          <ion-item class="custom-input" lines="none">
+            <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-input
+              type="text"
+              placeholder="Ingresa tu usuario"
+              formControlName="username"
+              class="custom-input-field"
+              [class.error]="isFieldInvalidSignup('username')"
+            /> <!-- Modificado: Ahora es un tag de auto-cierre -->
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalidSignup('username')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessageSignup('username') }}</small>
+            </ion-text>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <ion-item class="custom-input" lines="none">
+            <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Ingresa tu correo"
+              formControlName="email"
+              class="custom-input-field"
+              [class.error]="isFieldInvalidSignup('email')"
+            /> <!-- Modificado: Ahora es un tag de auto-cierre -->
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalidSignup('email')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessageSignup('email') }}</small>
+            </ion-text>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <ion-item class="custom-input" lines="none">
+            <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Ingresa tu contraseña"
+              formControlName="password"
+              class="custom-input-field"
+              [class.error]="isFieldInvalidSignup('password')"
+            /> <!-- Modificado: Ahora es un tag de auto-cierre -->
+            <ion-button
+              fill="clear"
+              slot="end"
+              class="password-toggle"
+              (click)="togglePassword()"
+            >
+              <ion-icon
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="toggle-icon"
+              ></ion-icon>
+            </ion-button>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalidSignup('password')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessageSignup('password') }}</small>
+            </ion-text>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <ion-item class="custom-input" lines="none">
+            <ion-icon name="key-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Vuelve a ingresarla"
+              formControlName="confirmPassword"
+              class="custom-input-field"
+              [class.error]="isFieldInvalidSignup('confirmPassword')"
+            /> <!-- Modificado: Ahora es un tag de auto-cierre -->
+            <ion-button
+              fill="clear"
+              slot="end"
+              class="password-toggle"
+              (click)="toggleConfirmPassword()"
+            >
+              <ion-icon
+                [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="toggle-icon"
+              ></ion-icon>
+            </ion-button>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalidSignup('confirmPassword')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessageSignup('confirmPassword') }}</small>
+            </ion-text>
+          </div>
+          <div class="error-message" *ngIf="signupForm.errors?.['passwordMismatch'] && (signupForm.get('confirmPassword')?.dirty || signupForm.get('confirmPassword')?.touched)">
+            <ion-text color="danger">
+              <small>Las contraseñas no coinciden</small>
+            </ion-text>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          class="signup-button"
+          type="submit"
+          [disabled]="signupForm.invalid || signupForm.errors?.['passwordMismatch'] || isLoading" 
+        >
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner> <!-- Spinner añadido aquí -->
+          <span *ngIf="!isLoading">REGISTRARSE</span> <!-- Texto solo si no está cargando -->
+        </ion-button>
+      </form>
+
+      <div class="footer-section">
+        <p class="footer-text">
+          ¿Ya tienes una cuenta?
+          <ion-button fill="clear" class="signin-link" (click)="goToSignIn()">
+            <strong>Inicia Sesión</strong>
+          </ion-button>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>
